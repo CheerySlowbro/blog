@@ -12,6 +12,7 @@ A: 主要问题在于最终图片呈现的效果，oss在较高模糊度上图�
 Q: 如何解决跨域问题？
 A: 1.图片CDN配置允许跨域访问，设置 `img.crossOrigin='anonymous'`, 可参考下面 `convertURLToImage` 函数的实现
 
+
 ### 上代码
 
 有些地方还可以优化，根据实际项目情况来调整
@@ -58,7 +59,7 @@ function convertURLToImage(src) {
   return new Promise(resolve => {
     const img = new Image()
     img.onload = () => resolve(img)
-    img.crossOrigin = 'anonymous'
+    img.crossOrigin = 'anonymous' // 解决 Operation is insecure 跨域问题
     img.src = src // 实际测试 iOS 14.x 以下必须先设置 crossOrigin 再设置 src
   })
 }
