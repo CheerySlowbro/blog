@@ -1,0 +1,36 @@
+# JavaScript 语义化版本比较
+
+> 最近发现项目内存在很多版本比较的代码，写的不是很好，先整理规范一下
+
+```js
+class Version {
+  /**
+   * 语义化版本比较，例如：A==B=0、A>B=1、A<B=-1
+   * @remark 语义化版本参考 https://semver.org/lang/zh-CN/
+   * @param {string} source A版本号
+   * @param {string} target B版本号
+   * @returns {number}
+   */
+  static compare(source = '', target = '') {
+    // 类数字则转数字，非数字则转charCode
+    const parse = str => str.split('.').map(e => (isNaN(Number(e)) ? e.charCodeAt() : Number(e)))
+    const sources = parse(source)
+    const targets = parse(target)
+    const count = Math.max(sources.length, targets.length) // 取需要比较的位数
+    let result = 0
+    for (let i = 0; i < count; i++) {
+      const a = sources[i] || 0
+      const b = targets[i] || 0
+      if (a === b) continue // 相等继续比
+      result = a > b ? 1 : -1 // 不相等则结束
+      break
+    }
+    return result
+  }
+}
+
+Version.compare('2.3.0', '3.1.0')
+Version.compare('3.2.0', '3.1.0')
+Version.compare('5.3.a', '3.1.0')
+Version.compare('3.1.00', '3.1.0')
+```
